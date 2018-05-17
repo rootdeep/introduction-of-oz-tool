@@ -1,0 +1,398 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>验证镜像 · k8s 相关源码分析</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="rootdeep <zhiguo.lee@foxmail.com>">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../error/" />
+    
+    
+    <link rel="prev" href="build-image.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+    
+        
+        <li>
+            <a href="http://rootdeep.github.io" target="_blank" class="custom-link">rootdeep</a>
+        </li>
+    
+    
+
+    
+    <li class="divider"></li>
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../oz-introduction.html">
+            
+                <a href="../oz-introduction.html">
+            
+                    
+                    Oz 工具介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" >
+            
+                <span>
+            
+                    
+                    制作环境准备
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../environment/os-prepare.html">
+            
+                <a href="../environment/os-prepare.html">
+            
+                    
+                    Host 节点环境
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../environment/necessary-package.html">
+            
+                <a href="../environment/necessary-package.html">
+            
+                    
+                    安装基础软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../environment/configure-oz.html">
+            
+                <a href="../environment/configure-oz.html">
+            
+                    
+                    配置Oz
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <span>
+            
+                    
+                    制作镜像
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="write-tdl.html">
+            
+                <a href="write-tdl.html">
+            
+                    
+                    编写TDL文件
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="write-ks.html">
+            
+                <a href="write-ks.html">
+            
+                    
+                    编写kickstart
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="build-image.html">
+            
+                <a href="build-image.html">
+            
+                    
+                    制作镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.4" data-path="verify-image.html">
+            
+                <a href="verify-image.html">
+            
+                    
+                    验证镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../error/">
+            
+                <a href="../error/">
+            
+                    
+                    遇到的问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >验证镜像</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="&#x9A8C;&#x8BC1;&#x955C;&#x50CF;">&#x9A8C;&#x8BC1;&#x955C;&#x50CF;</h1>
+<p>&#x955C;&#x50CF;&#x521B;&#x5EFA;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x955C;&#x50CF;&#x4F1A;&#x4FDD;&#x5B58;&#x5728;/var/lib/libvirt/images/&#x4E0B;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#x5148;&#x5728;&#x8282;&#x70B9;A&#x5C1D;&#x8BD5;&#x542F;&#x52A8;&#x955C;&#x50CF;&#xFF0C;&#x9A8C;&#x8BC1;&#x5236;&#x4F5C;&#x662F;&#x5426;&#x6210;&#x529F;&#x3002;&#x542F;&#x52A8;&#x524D;&#xFF0C;&#x5148;&#x5907;&#x4EFD;&#x955C;&#x50CF;&#xFF0C;&#x5E76;&#x4E14;&#x4F7F;&#x7528;qemu-system-x86_64 &#x542F;&#x52A8;&#x7ADF;&#x50CF;&#x65F6;&#xFF0C;&#x9700;&#x8981;&#x5728;&#x672C;&#x5730;&#x914D;&#x7F6E;VNC viewer client &#x53CA;&#x5728;&#x8282;&#x70B9;A&#x914D;&#x7F6E;VNC server&#x3002;</p>
+<p><code>qemu-system-x86_64 -m 1024 -enable-kvm centos7_x86_64.qcow2  --vnc :1</code></p>
+<p>&#x865A;&#x62DF;&#x673A;&#x542F;&#x52A8;&#x521D;&#x59CB;&#x5316;&#x5B8C;&#x6210;&#x4EE5;&#x540E;&#xFF0C;&#x8FDB;&#x5165;&#x767B;&#x5F55;&#x754C;&#x9762;&#x3002;&#x7B2C;&#x4E00;&#x6B21;&#x767B;&#x5F55;&#x9ED8;&#x8BA4;&#x7528;&#x6237;&#x540D;/&#x5BC6;&#x7801;&#x4E3A;&#x5728;ks &#x6587;&#x4EF6;&#x4E2D;&#x5B9A;&#x4E49;&#x7684;centos/changeme.</p>
+<p>&#x8FD0;&#x884C;&#x622A;&#x56FE;&#x5982;&#x4E0B;&#xFF1A;<img src="../image/vm-start.png" alt="vm-start"></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="build-image.html" class="navigation navigation-prev " aria-label="Previous page: 制作镜像">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../error/" class="navigation navigation-next " aria-label="Next page: 遇到的问题">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"验证镜像","level":"1.4.4","depth":2,"next":{"title":"遇到的问题","level":"1.5","depth":1,"path":"error/README.md","ref":"error/README.md","articles":[]},"previous":{"title":"制作镜像","level":"1.4.3","depth":2,"path":"make-image/build-image.md","ref":"make-image/build-image.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"rootdeep <zhiguo.lee@foxmail.com>","pdf":{"pageBreaksBefore":"/","headerTemplate":null,"paperSize":"a4","margin":{"right":62,"left":62,"top":36,"bottom":36},"fontSize":12,"fontFamily":"Arial","footerTemplate":null,"chapterMark":"pagebreak","pageNumbers":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"k8s 相关源码分析","links":{"sidebar":{"rootdeep":"http://rootdeep.github.io"}},"gitbook":"*","description":"This is a sample book created by gitbook","extension":null},"file":{"path":"make-image/verify-image.md","mtime":"2018-05-16T09:32:35.096Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-17T01:50:59.409Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
